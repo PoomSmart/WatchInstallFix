@@ -1,9 +1,10 @@
 # WatchInstallFix
 
-In some iOS versions (presumably iOS < 15.4), `-[MIExecutableBundle isExtensionlessWatchKitApp]` is implemented like this:
+In some iOS versions (presumably iOS 14 - 15), `-[MIExecutableBundle isExtensionlessWatchKitApp]` is implemented like this:
 
 ```objc
 @implementation MIExecutableBundle
+
 - (BOOL)isExtensionlessWatchKitApp {
     BOOL isExtensionlessWatchKitAppFeatureEnabled = _os_feature_enabled_impl("watchkit", "extensionless_watchkit_apps");
     if (isExtensionlessWatchKitAppFeatureEnabled) {
@@ -15,6 +16,6 @@ In some iOS versions (presumably iOS < 15.4), `-[MIExecutableBundle isExtensionl
 @end
 ```
 
-Based on my testing, this method returns `NO` on iPads. This means that if a developer has a watchOS app that is extensionless, it will not be able to be installed on iPads. Google Maps is one such example, according to my testing, not installable anymore on iPadOS 15.1. This should also be the case for iPod touch.
+Based on my testing, this method returns `NO` on iPads. This means that if a developer has a watchOS app that is extensionless, it will not be able to be installed on iPads. Google Maps is one such example, installing it is not possible on iPadOS 15.1. This is probably also the case on iPod touches.
 
-This tweak fixes this by directly returning `[[self infoPlistSubset][@"WKApplication"] boolValue]`, entirely bypassing the OS feature check.
+This tweak fixes this by making `-isExtensionlessWatchKitApp` directly returning `[[self infoPlistSubset][@"WKApplication"] boolValue]`. This entirely bypasses the OS feature check and allows the installation of extensionless watchOS apps anywhere.
