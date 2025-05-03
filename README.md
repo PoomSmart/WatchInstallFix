@@ -1,6 +1,6 @@
 # WatchInstallFix
 
-In some iOS versions (presumably iOS 14 - 15), `-[MIExecutableBundle isExtensionlessWatchKitApp]` is implemented like this:
+In some iOS versions (iOS 14 - 15?), `-[MIExecutableBundle isExtensionlessWatchKitApp]` is implemented like this:
 
 ```objc
 @implementation MIExecutableBundle
